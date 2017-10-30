@@ -79,7 +79,7 @@ namespace DonationTracker
                         if (donation.amount.HasValue)
                         {
                             total += donation.amount.Value;
-                            writer.Write(string.Format(Culture, " ({0:C})", donation.amount.Value));
+                            writer.Write(string.Format(Culture, " ({0}$)", donation.amount.Value));
                         }
                         writer.WriteLine();
                     }
@@ -88,7 +88,7 @@ namespace DonationTracker
                 var realTotal = Math.Max(total, _teamTotal.Value);
                 using (var writer = new StreamWriter(new FileStream(_totalFile, FileMode.Create, FileAccess.Write, FileShare.Read)))
                 {
-                    writer.Write(realTotal.ToString("C", Culture));
+                    writer.Write("{0}$", realTotal);
                 }
             }
 
@@ -126,7 +126,7 @@ namespace DonationTracker
             {
                 Task.WaitAll(_statusTask, _donationTask);
             }
-            catch (TaskCanceledException)
+            catch (AggregateException)
             {
             }
             _downloader.Dispose();
