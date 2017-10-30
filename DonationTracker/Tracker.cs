@@ -38,7 +38,7 @@ namespace DonationTracker
             _cancellation = new CancellationTokenSource();
         }
 
-        public async void Start()
+        public async Task Start()
         {
             async Task UpdateTeamStatus()
             {
@@ -60,11 +60,12 @@ namespace DonationTracker
             async Task UpdateDonations()
             {
                 var donations = from JArray data in await Task.WhenAll(participants.Select(GetDonationData))
+                                from JObject item in data
                                 select new
                                 {
-                                    donor = data.Value<string>("donorName") ?? "Anonyme",
-                                    amount = data.Value<double?>("donationAmount"),
-                                    time = data.Value<DateTime>("createdOn")
+                                    donor = item.Value<string>("donorName") ?? "Anonyme",
+                                    amount = item.Value<double?>("donationAmount"),
+                                    time = item.Value<DateTime>("createdOn")
                                 };
 
                 double total = 0.0;

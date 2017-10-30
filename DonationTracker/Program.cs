@@ -17,7 +17,7 @@ namespace DonationTracker
         {
             using (var tracker = new Tracker(TeamZe, "Donations.txt", "Totals.txt"))
             {
-                tracker.Start();
+                tracker.Start().Wait();
                 Console.WriteLine("Press any key to stop.");
                 Console.ReadKey(true);
             }
